@@ -11,7 +11,7 @@ namespace seconv.libse.Common
             Value,
         }
 
-        public List<string> Errors { get; private set; } = new List<string>();
+        public List<string?> Errors { get; private set; } = new List<string?>();
 
         public class StateElement
         {
@@ -22,10 +22,10 @@ namespace seconv.libse.Common
 
         private readonly HashSet<char> _whiteSpace = new HashSet<char> { ' ', '\r', '\n', '\t' };
 
-        public List<string> GetAllTagsByNameAsStrings(string content, string name)
+        public List<string?> GetAllTagsByNameAsStrings(string content, string name)
         {
-            Errors = new List<string>();
-            var list = new List<string>();
+            Errors = new List<string?>();
+            var list = new List<string?>();
             int i = 0;
             int max = content.Length;
             var state = new Stack<StateElement>();

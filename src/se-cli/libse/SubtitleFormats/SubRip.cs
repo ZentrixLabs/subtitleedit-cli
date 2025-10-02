@@ -6,13 +6,13 @@ namespace seconv.libse.SubtitleFormats
 {
     public class SubRip : SubtitleFormat
     {
-        public string Errors { get; private set; }
-        private StringBuilder _errors;
+        public string Errors { get; private set; } = string.Empty;
+        private StringBuilder _errors = new StringBuilder();
         private int _lineNumber;
         private bool _isMsFrames;
         private bool _isWsrt;
-        private static Regex _regExWsrtItalicStart;
-        private static Regex _regExWsrtItalicEnd;
+        private static Regex _regExWsrtItalicStart = new Regex(@"<i>", RegexOptions.Compiled);
+        private static Regex _regExWsrtItalicEnd = new Regex(@"</i>", RegexOptions.Compiled);
 
         private enum ExpectingLine
         {
@@ -21,8 +21,8 @@ namespace seconv.libse.SubtitleFormats
             Text
         }
 
-        private Paragraph _paragraph;
-        private Paragraph _lastParagraph;
+        private Paragraph _paragraph = new Paragraph();
+        private Paragraph _lastParagraph = new Paragraph();
         private ExpectingLine _expecting;
 
         public override string Extension => ".srt";

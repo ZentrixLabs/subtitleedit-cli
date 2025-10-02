@@ -2878,101 +2878,106 @@ $HorzAlign          =   Center
 
             var settings = new Settings();
 
-            XmlNode versionNode = doc.DocumentElement.SelectSingleNode("Version");
-            if (versionNode != null)
+            if (doc.DocumentElement != null)
             {
-                settings.Version = versionNode.InnerText;
-            }
-
-            // Compare
-            XmlNode nodeCompare = doc.DocumentElement.SelectSingleNode("Compare");
-            if (nodeCompare != null)
-            {
-                XmlNode xnode = nodeCompare.SelectSingleNode("ShowOnlyDifferences");
-                if (xnode != null)
+                XmlNode? versionNode = doc.DocumentElement.SelectSingleNode("Version");
+                if (versionNode != null)
                 {
-                    settings.Compare.ShowOnlyDifferences = Convert.ToBoolean(xnode.InnerText);
+                    settings.Version = versionNode.InnerText;
                 }
 
-                xnode = nodeCompare.SelectSingleNode("OnlyLookForDifferenceInText");
-                if (xnode != null)
+                // Compare
+                XmlNode? nodeCompare = doc.DocumentElement.SelectSingleNode("Compare");
+                if (nodeCompare != null)
                 {
-                    settings.Compare.OnlyLookForDifferenceInText = Convert.ToBoolean(xnode.InnerText);
+                    XmlNode? xnode = nodeCompare.SelectSingleNode("ShowOnlyDifferences");
+                    if (xnode != null)
+                    {
+                        settings.Compare.ShowOnlyDifferences = Convert.ToBoolean(xnode.InnerText);
+                    }
+
+                    xnode = nodeCompare.SelectSingleNode("OnlyLookForDifferenceInText");
+                    if (xnode != null)
+                    {
+                        settings.Compare.OnlyLookForDifferenceInText = Convert.ToBoolean(xnode.InnerText);
+                    }
+
+                    xnode = nodeCompare.SelectSingleNode("IgnoreLineBreaks");
+                    if (xnode != null)
+                    {
+                        settings.Compare.IgnoreLineBreaks = Convert.ToBoolean(xnode.InnerText);
+                    }
+
+                    xnode = nodeCompare.SelectSingleNode("IgnoreFormatting");
+                    if (xnode != null)
+                    {
+                        settings.Compare.IgnoreFormatting = Convert.ToBoolean(xnode.InnerText);
+                    }
                 }
 
-                xnode = nodeCompare.SelectSingleNode("IgnoreLineBreaks");
-                if (xnode != null)
+                // Recent files
+                XmlNode? node = doc.DocumentElement.SelectSingleNode("RecentFiles");
+                if (node != null)
                 {
-                    settings.Compare.IgnoreLineBreaks = Convert.ToBoolean(xnode.InnerText);
+                    foreach (XmlNode listNode in node.SelectNodes("FileNames/FileName"))
+                    {
+                        string firstVisibleIndex = "-1";
+                        if (listNode.Attributes["FirstVisibleIndex"] != null)
+                        {
+                            firstVisibleIndex = listNode.Attributes["FirstVisibleIndex"].Value;
+                        }
+
+                        string firstSelectedIndex = "-1";
+                        if (listNode.Attributes["FirstSelectedIndex"] != null)
+                        {
+                            firstSelectedIndex = listNode.Attributes["FirstSelectedIndex"].Value;
+                        }
+
+                        string videoFileName = null;
+                        if (listNode.Attributes["VideoFileName"] != null)
+                        {
+                            videoFileName = listNode.Attributes["VideoFileName"].Value;
+                        }
+
+                        string audioTrack = "-1";
+                        if (listNode.Attributes["AudioTrack"] != null)
+                        {
+                            audioTrack = listNode.Attributes["AudioTrack"].Value;
+                        }
+
+                        string originalFileName = null;
+                        if (listNode.Attributes["OriginalFileName"] != null)
+                        {
+                            originalFileName = listNode.Attributes["OriginalFileName"].Value;
+                        }
+
+                        long videoOffset = 0;
+                        if (listNode.Attributes["VideoOffset"] != null)
+                        {
+                            long.TryParse(listNode.Attributes["VideoOffset"].Value, out videoOffset);
+                        }
+
+                        bool isSmpte = false;
+                        if (listNode.Attributes["IsSmpte"] != null)
+                        {
+                            bool.TryParse(listNode.Attributes["IsSmpte"].Value, out isSmpte);
+                        }
+
+                        settings.RecentFiles.Files.Add(new RecentFileEntry { FileName = listNode.InnerText, FirstVisibleIndex = int.Parse(firstVisibleIndex, CultureInfo.InvariantCulture), FirstSelectedIndex = int.Parse(firstSelectedIndex, CultureInfo.InvariantCulture), VideoFileName = videoFileName, AudioTrack = int.Parse(audioTrack, CultureInfo.InvariantCulture), OriginalFileName = originalFileName, VideoOffsetInMs = videoOffset, VideoIsSmpte = isSmpte });
+                    }
                 }
 
-                xnode = nodeCompare.SelectSingleNode("IgnoreFormatting");
-                if (xnode != null)
+                // General
+                node = doc.DocumentElement.SelectSingleNode("General");
+
+                // Profiles
+                int profileCount = 0;
+                foreach (XmlNode listNode in node.SelectNodes("Profiles/Profile"))
                 {
-                    settings.Compare.IgnoreFormatting = Convert.ToBoolean(xnode.InnerText);
-                }
-            }
-
-            // Recent files
-            XmlNode node = doc.DocumentElement.SelectSingleNode("RecentFiles");
-            foreach (XmlNode listNode in node.SelectNodes("FileNames/FileName"))
-            {
-                string firstVisibleIndex = "-1";
-                if (listNode.Attributes["FirstVisibleIndex"] != null)
-                {
-                    firstVisibleIndex = listNode.Attributes["FirstVisibleIndex"].Value;
-                }
-
-                string firstSelectedIndex = "-1";
-                if (listNode.Attributes["FirstSelectedIndex"] != null)
-                {
-                    firstSelectedIndex = listNode.Attributes["FirstSelectedIndex"].Value;
-                }
-
-                string videoFileName = null;
-                if (listNode.Attributes["VideoFileName"] != null)
-                {
-                    videoFileName = listNode.Attributes["VideoFileName"].Value;
-                }
-
-                string audioTrack = "-1";
-                if (listNode.Attributes["AudioTrack"] != null)
-                {
-                    audioTrack = listNode.Attributes["AudioTrack"].Value;
-                }
-
-                string originalFileName = null;
-                if (listNode.Attributes["OriginalFileName"] != null)
-                {
-                    originalFileName = listNode.Attributes["OriginalFileName"].Value;
-                }
-
-                long videoOffset = 0;
-                if (listNode.Attributes["VideoOffset"] != null)
-                {
-                    long.TryParse(listNode.Attributes["VideoOffset"].Value, out videoOffset);
-                }
-
-                bool isSmpte = false;
-                if (listNode.Attributes["IsSmpte"] != null)
-                {
-                    bool.TryParse(listNode.Attributes["IsSmpte"].Value, out isSmpte);
-                }
-
-                settings.RecentFiles.Files.Add(new RecentFileEntry { FileName = listNode.InnerText, FirstVisibleIndex = int.Parse(firstVisibleIndex, CultureInfo.InvariantCulture), FirstSelectedIndex = int.Parse(firstSelectedIndex, CultureInfo.InvariantCulture), VideoFileName = videoFileName, AudioTrack = int.Parse(audioTrack, CultureInfo.InvariantCulture), OriginalFileName = originalFileName, VideoOffsetInMs = videoOffset, VideoIsSmpte = isSmpte });
-            }
-
-            // General
-            node = doc.DocumentElement.SelectSingleNode("General");
-
-            // Profiles
-            int profileCount = 0;
-            foreach (XmlNode listNode in node.SelectNodes("Profiles/Profile"))
-            {
-                if (profileCount == 0)
-                {
-                    settings.General.Profiles.Clear();
-                }
+                    if (profileCount == 0)
+                    {
+                        settings.General.Profiles.Clear();
+                    }
 
                 var p = new RulesProfile();
                 var subtitleLineMaximumLength = listNode.SelectSingleNode("SubtitleLineMaximumLength")?.InnerText;
@@ -3052,7 +3057,7 @@ $HorzAlign          =   Center
             }
 
 
-            XmlNode subNode = node.SelectSingleNode("CurrentProfile");
+            XmlNode? subNode = node.SelectSingleNode("CurrentProfile");
             if (subNode != null)
             {
                 settings.General.CurrentProfile = subNode.InnerText;
@@ -7588,14 +7593,15 @@ $HorzAlign          =   Center
                 };
                 GeneralSettings.AddExtraProfiles(settings.General.Profiles);
             }
+            }
 
             return settings;
         }
 
         internal static void ReadShortcuts(XmlDocument doc, Shortcuts shortcuts)
         {
-            XmlNode node;
-            XmlNode subNode;
+            XmlNode? node;
+            XmlNode? subNode;
             node = doc.DocumentElement.SelectSingleNode("Shortcuts");
             if (node != null)
             {

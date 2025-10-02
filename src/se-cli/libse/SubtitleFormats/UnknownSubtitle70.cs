@@ -6,8 +6,8 @@ namespace seconv.libse.SubtitleFormats
     public class UnknownSubtitle70 : SubtitleFormat
     {
         private static readonly Regex RegexMicroDvdLine = new Regex(@"^\[-?\d+\]\[-?\d+\].*$", RegexOptions.Compiled);
-        public string Errors { get; private set; }
-        private StringBuilder _errors;
+        public string Errors { get; private set; } = string.Empty;
+        private StringBuilder _errors = new StringBuilder();
         private int _lineNumber;
 
         public override string Extension => ".txt";

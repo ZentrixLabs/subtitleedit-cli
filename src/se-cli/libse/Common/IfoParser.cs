@@ -8,19 +8,19 @@ namespace seconv.libse.Common
         public class AudioStream
         {
             public int LanguageTypeSpecified { get; set; }
-            public string Language { get; set; }
-            public string LanguageCode { get; set; }
-            public string CodingMode { get; set; }
+            public string? Language { get; set; }
+            public string? LanguageCode { get; set; }
+            public string? CodingMode { get; set; }
             public int Channels { get; set; }
-            public string Extension { get; set; }
+            public string? Extension { get; set; }
         };
 
         public class VideoStream
         {
-            public string Aspect { get; set; }
-            public string Standard { get; set; }
-            public string CodingMode { get; set; }
-            public string Resolution { get; set; }
+            public string? Aspect { get; set; }
+            public string? Standard { get; set; }
+            public string? CodingMode { get; set; }
+            public string? Resolution { get; set; }
         }
 
         public class VtsVobs
@@ -84,7 +84,7 @@ namespace seconv.libse.Common
         {
             public int NumberOfPgc { get; set; }
             public int NumberOfCells { get; set; }
-            public string PlaybackTime { get; set; }
+            public string PlaybackTime { get; set; } = string.Empty;
             public List<byte> PgcEntryCells { get; set; }
             public List<string> PgcPlaybackTimes { get; set; }
             public List<string> PgcStartTimes { get; set; }
@@ -125,7 +125,7 @@ namespace seconv.libse.Common
             public static readonly int WrongInfoType = 1;
 
             public int ErrorCode { get; set; }
-            public string ErrorMessage { get; set; }
+            public string? ErrorMessage { get; set; }
         };
 
         private readonly List<string> _arrayOfAudioMode = new List<string> { "AC3", "...", "MPEG1", "MPEG2", "LPCM", "...", "DTS" };
@@ -142,7 +142,7 @@ namespace seconv.libse.Common
 
         private readonly VtsVobs _vtsVobs = new VtsVobs();
         private readonly VtsPgci _vtsPgci = new VtsPgci();
-        private FileStream _fs;
+        private FileStream? _fs;
 
         public IfoParser(string fileName)
         {
@@ -179,6 +179,9 @@ namespace seconv.libse.Common
         private void ParseVtsVobs()
         {
             var buffer = new byte[16];
+
+            if (_fs == null)
+                throw new InvalidOperationException("File stream is not initialized.");
 
             //retrieve video info
             _fs.Position = 0x200;
@@ -272,6 +275,9 @@ namespace seconv.libse.Common
 
         private int GetEndian(int count)
         {
+            if (_fs == null)
+                throw new InvalidOperationException("File stream is not initialized.");
+
             int result = 0;
             for (int i = count; i > 0; i--)
             {
@@ -284,6 +290,9 @@ namespace seconv.libse.Common
         private void ParseVtsPgci()
         {
             const int sectorSize = 2048;
+
+            if (_fs == null)
+                throw new InvalidOperationException("File stream is not initialized.");
 
             _fs.Position = 0xCC; //Get VTS_PGCI adress
             int tableStart = sectorSize * GetEndian(4);

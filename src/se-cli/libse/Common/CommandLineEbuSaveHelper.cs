@@ -4,10 +4,10 @@ namespace seconv.libse.Common
 {
     public class CommandLineEbuSaveHelper : Ebu.IEbuUiHelper
     {
-        private Ebu.EbuGeneralSubtitleInformation _header;
+        private Ebu.EbuGeneralSubtitleInformation? _header;
         private byte _justificationCode = 2;
-        private string _fileName;
-        private Subtitle _subtitle;
+        private string? _fileName;
+        private Subtitle? _subtitle;
 
         public void Initialize(Ebu.EbuGeneralSubtitleInformation header, byte justificationCode, string fileName, Subtitle subtitle)
         {

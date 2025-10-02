@@ -4,7 +4,7 @@ namespace seconv.libse.Common
 {
     public class NoBreakAfterItem : IComparable<NoBreakAfterItem>
     {
-        public Regex Regex { get; }
+        public Regex? Regex { get; }
         public readonly string Text;
 
         public NoBreakAfterItem(Regex regex, string text)

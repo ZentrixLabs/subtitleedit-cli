@@ -24,7 +24,7 @@ namespace seconv.libse.Common
             return count;
         }
 
-        public static string AutoDetectGoogleLanguage(Encoding encoding)
+        public static string? AutoDetectGoogleLanguage(Encoding encoding)
         {
             switch (encoding.CodePage)
             {

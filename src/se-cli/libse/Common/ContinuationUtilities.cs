@@ -668,7 +668,7 @@ namespace seconv.libse.Common
             }
             newFirstWord = newFirstWord.Trim();
 
-            string result = null;
+            string result = string.Empty;
 
             // If we can find it...
             if (originalText.IndexOf(firstWord, StringComparison.Ordinal) >= 0)
@@ -1485,18 +1485,18 @@ namespace seconv.libse.Common
 
         public class ContinuationProfile
         {
-            public string Suffix { get; set; }
+            public string Suffix { get; set; } = string.Empty;
             public bool SuffixApplyIfComma { get; set; }
             public bool SuffixAddSpace { get; set; }
             public bool SuffixReplaceComma { get; set; }
-            public string Prefix { get; set; }
+            public string Prefix { get; set; } = string.Empty;
             public bool PrefixAddSpace { get; set; }
             public bool UseDifferentStyleGap { get; set; }
-            public string GapSuffix { get; set; }
+            public string GapSuffix { get; set; } = string.Empty;
             public bool GapSuffixApplyIfComma { get; set; }
             public bool GapSuffixAddSpace { get; set; }
             public bool GapSuffixReplaceComma { get; set; }
-            public string GapPrefix { get; set; }
+            public string GapPrefix { get; set; } = string.Empty;
             public bool GapPrefixAddSpace { get; set; }
         }
     }

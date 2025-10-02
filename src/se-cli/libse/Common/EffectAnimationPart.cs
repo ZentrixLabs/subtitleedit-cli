@@ -10,6 +10,8 @@ namespace seconv.libse.Common
             Pre = string.Empty;
             Text = string.Empty;
             Post = string.Empty;
+            Face = string.Empty; // Initialize to avoid CS8618
+            Size = string.Empty; // Initialize to avoid CS8618
         }
         public string Pre { get; set; }
         public string Text { get; set; }

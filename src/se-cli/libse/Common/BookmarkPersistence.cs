@@ -53,7 +53,7 @@ namespace seconv.libse.Common
             return true;
         }
 
-        private string SerializeBookmarks()
+        private string? SerializeBookmarks()
         {
             int count = 0;
             var sb = new StringBuilder();

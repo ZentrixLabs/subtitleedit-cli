@@ -13,7 +13,7 @@ namespace seconv.libse.SubtitleFormats
             int GetPacEncoding(byte[] previewBuffer, string fileName);
         }
 
-        public static IGetPacEncoding GetPacEncodingImplementation;
+        public static IGetPacEncoding GetPacEncodingImplementation = null!;
 
         public static readonly TimeCode PacNullTime = new TimeCode(655, 35, 00, 0);
 

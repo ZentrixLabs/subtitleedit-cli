@@ -16,7 +16,7 @@ namespace seconv.libse.Common
 
         public bool Forced { get; set; }
 
-        public string Extra { get; set; }
+        public string Extra { get; set; } = string.Empty;
 
         public bool IsComment { get; set; }
 

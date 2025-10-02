@@ -16,6 +16,11 @@ namespace seconv.libse.Common
                 return MovieHasher.GenerateHashFromString(videoFileName);
             }
 
+            if (videoFileName == null)
+            {
+                throw new ArgumentNullException(nameof(videoFileName));
+            }
+
             return ToHexadecimal(ComputeMovieHash(videoFileName));
         }
 

@@ -13,8 +13,8 @@ namespace seconv
 {
     public static class CommandLineConverter
     {
-        private static StreamWriter _stdOutWriter;
-        private static string _currentFolder;
+        private static StreamWriter? _stdOutWriter;
+        private static string? _currentFolder;
 
         public delegate void BatchConvertProgress(string progress);
 
@@ -74,6 +74,12 @@ namespace seconv
 
         private static int Help(string[] arguments)
         {
+            // Ensure _stdOutWriter is initialized before use
+            if (_stdOutWriter == null)
+            {
+                _stdOutWriter = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+            }
+
             var secondArgument = arguments.Length > 1 ? arguments[1].Trim().ToLowerInvariant() : null;
             if (secondArgument is "formats" or "/formats" or "-formats" or "/list" or "-list")
             {
@@ -162,6 +168,12 @@ namespace seconv
             if (arguments.Length < 3)
             {
                 return Help(arguments);
+            }
+
+            // Ensure _stdOutWriter is initialized before use
+            if (_stdOutWriter == null)
+            {
+                _stdOutWriter = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
             }
 
             var count = 0;
@@ -255,7 +267,7 @@ namespace seconv
                         }
                         else
                         {
-                            targetEncoding = new TextEncoding(Encoding.GetEncoding(encodingName), null);
+                            targetEncoding = new TextEncoding(Encoding.GetEncoding(encodingName), string.Empty);
                         }
                     }
                 }
@@ -427,11 +439,16 @@ namespace seconv
                     }
                     else if (!Path.IsPathRooted(folderName))
                     {
-                        folderName = Path.Combine(inputFolder, folderName);
+                        folderName = string.IsNullOrEmpty(inputFolder) ? folderName : Path.Combine(inputFolder, folderName);
                     }
-                    foreach (var fn in Directory.EnumerateFiles(folderName, fileName))
+
+                    // Ensure folderName is not null before using it
+                    if (!string.IsNullOrEmpty(folderName))
                     {
-                        files.Add(fn); // silently ignore duplicates
+                        foreach (var fn in Directory.EnumerateFiles(folderName, fileName))
+                        {
+                            files.Add(fn); // silently ignore duplicates
+                        }
                     }
                 }
 
@@ -444,7 +461,7 @@ namespace seconv
                         throw new FileNotFoundException($"The /ebuheaderfile '{ebuHeaderFileTemp}' does not exist.");
                     }
 
-                    if (!new Ebu().IsMine(null, ebuHeaderFileTemp))
+                    if (!new Ebu().IsMine(new List<string>(), ebuHeaderFileTemp))
                     {
                         throw new FormatException($"The /ebuheaderfile '{ebuHeaderFileTemp}' is not an EBU STL file.");
                     }
@@ -532,8 +549,7 @@ namespace seconv
                                                         }
                                                     }
 
-                                                    BatchConvertSave(targetFormat, offset, deleteContains, targetEncoding, outputFolder, string.Empty, count, ref converted, ref errors, formats, newFileName, sub, format, null, overwrite, pacCodePage, targetFrameRate, multipleReplaceImportFiles, actions, resolution, true, renumber: renumber, adjustDurationMs: adjustDurationMs);
-                                                    done = true;
+                                                    BatchConvertSave(targetFormat, offset, deleteContains, targetEncoding, outputFolder, string.Empty, count, ref converted, ref errors, formats, newFileName, sub, format, string.Empty, overwrite, pacCodePage, targetFrameRate, multipleReplaceImportFiles, actions, resolution, true, renumber: renumber, adjustDurationMs: adjustDurationMs); done = true;
                                                 }
                                             }
                                         }

@@ -7,7 +7,7 @@ namespace seconv.libse.Common
     {
         public DialogType DialogStyle { get; set; }
         public ContinuationStyle ContinuationStyle { get; set; }
-        public string TwoLetterLanguageCode { get; set; }
+        public string? TwoLetterLanguageCode { get; set; }
         public bool SkipLineEndingCheck { get; set; }
 
         private static char GetDashChar() => '-';
@@ -470,11 +470,10 @@ namespace seconv.libse.Common
 
             var l0 = HtmlUtil.RemoveHtmlTags(lines[0]);
             var l1 = HtmlUtil.RemoveHtmlTags(lines[1], true);
-            var noLineEnding = SkipLineEndingCheck || LanguageAutoDetect.IsLanguageWithoutPeriods(TwoLetterLanguageCode);
-
+            var noLineEnding = SkipLineEndingCheck || (TwoLetterLanguageCode != null && LanguageAutoDetect.IsLanguageWithoutPeriods(TwoLetterLanguageCode));
             if (lines.Count == 2)
             {
-                if ((l0.HasSentenceEnding(TwoLetterLanguageCode) || noLineEnding) &&
+                if ((TwoLetterLanguageCode != null && l0.HasSentenceEnding(TwoLetterLanguageCode)) || noLineEnding &&
                     (l1.TrimStart().StartsWith(GetDashChar()) || l1.TrimStart().StartsWith(GetAlternateDashChar())))
                 {
                     return true;
@@ -512,9 +511,9 @@ namespace seconv.libse.Common
                     return true;
                 }
 
-                if ((l0.HasSentenceEnding(TwoLetterLanguageCode) || noLineEnding) &&
+                if ((l0.HasSentenceEnding(TwoLetterLanguageCode ?? string.Empty) || noLineEnding) &&
                     (l1.TrimStart().StartsWith(GetDashChar()) || l1.TrimStart().StartsWith(GetAlternateDashChar())) &&
-                    (l1.HasSentenceEnding(TwoLetterLanguageCode) || noLineEnding) &&
+                    (l1.HasSentenceEnding(TwoLetterLanguageCode ?? string.Empty) || noLineEnding) &&
                     (l2.TrimStart().StartsWith(GetDashChar()) || l2.TrimStart().StartsWith(GetAlternateDashChar())))
                 {
                     return true;
@@ -538,18 +537,18 @@ namespace seconv.libse.Common
 
             if (lines.Count == 2)
             {
-                if ((l0.HasSentenceEnding(TwoLetterLanguageCode) || noLineEnding) &&
+                if ((TwoLetterLanguageCode != null && l0.HasSentenceEnding(TwoLetterLanguageCode) || noLineEnding) &&
                     (l1.TrimStart().StartsWith(GetDashChar()) || l1.TrimStart().StartsWith(GetAlternateDashChar())))
                 {
                     return true;
                 }
 
                 var prevEnding = prev == null ||
-                    prev.Text.HasSentenceEnding(TwoLetterLanguageCode) ||
+                    (TwoLetterLanguageCode != null && prev.Text.HasSentenceEnding(TwoLetterLanguageCode)) ||
                     p.StartTime.TotalMilliseconds - prev.EndTime.TotalMilliseconds > 3000;
                 if (prevEnding &&
                     (l0.StartsWith(GetDashChar()) || l0.StartsWith(GetAlternateDashChar())) &&
-                    l0.HasSentenceEnding(TwoLetterLanguageCode))
+                    (TwoLetterLanguageCode != null && l0.HasSentenceEnding(TwoLetterLanguageCode)))
                 {
                     return true;
                 }
@@ -575,9 +574,9 @@ namespace seconv.libse.Common
                     return true;
                 }
 
-                if ((l0.HasSentenceEnding(TwoLetterLanguageCode) || noLineEnding) &&
+                if ((l0.HasSentenceEnding(TwoLetterLanguageCode ?? string.Empty) || noLineEnding) &&
                     (l1.TrimStart().StartsWith(GetDashChar()) || l1.TrimStart().StartsWith(GetAlternateDashChar())) &&
-                    (l1.HasSentenceEnding(TwoLetterLanguageCode) || noLineEnding) &&
+                    (l1.HasSentenceEnding(TwoLetterLanguageCode ?? string.Empty) || noLineEnding) &&
                     (l2.TrimStart().StartsWith(GetDashChar()) || l2.TrimStart().StartsWith(GetAlternateDashChar())))
                 {
                     return true;

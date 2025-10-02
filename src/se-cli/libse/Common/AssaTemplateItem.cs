@@ -2,7 +2,7 @@
 {
     public class AssaTemplateItem
     {
-        public string Tag { get; set; }
-        public string Hint { get; set; }
+        public string Tag { get; set; } = string.Empty;
+        public string Hint { get; set; } = string.Empty;
     }
 }

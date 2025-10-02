@@ -7,7 +7,7 @@ namespace seconv.libse.SubtitleFormats
 {
     public class SubStationAlpha : SubtitleFormat
     {
-        public string Errors { get; private set; }
+        public string Errors { get; private set; } = string.Empty;
 
         public override string Extension => ".ssa";
 

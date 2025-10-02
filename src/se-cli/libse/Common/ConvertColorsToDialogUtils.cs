@@ -8,7 +8,7 @@ namespace seconv.libse.Common
         {
             int index;
             string newColor;
-            string currentColor;
+            string? currentColor;
             bool firstLineAdded;
             bool endOfColor;
 

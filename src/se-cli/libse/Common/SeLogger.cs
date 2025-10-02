@@ -6,7 +6,7 @@ namespace seconv.libse.Common
     public static class SeLogger
     {
 
-        public static void Error(Exception exception, string message = null)
+        public static void Error(Exception exception, string? message = null)
         {
             if (exception == null)
             {

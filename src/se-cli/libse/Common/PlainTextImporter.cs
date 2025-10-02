@@ -294,7 +294,7 @@ namespace seconv.libse.Common
 
         internal class SplitListItem
         {
-            internal List<string> Lines { get; set; }
+            internal List<string> Lines { get; set; } = new List<string>();
 
             internal double DiffFromAverage(double avg)
             {

@@ -7,8 +7,8 @@ namespace seconv.libse.SubtitleFormats
     {
         public static bool SubtitleFormatsOrderChanged { get; set; }
 
-        private static IList<SubtitleFormat> _allSubtitleFormats;
-        private static IList<SubtitleFormat> _subtitleFormatsWithDefaultOrder;
+        private static IList<SubtitleFormat> _allSubtitleFormats = new List<SubtitleFormat>();
+        private static IList<SubtitleFormat> _subtitleFormatsWithDefaultOrder = new List<SubtitleFormat>();
 
         protected static readonly char[] SplitCharColon = { ':' };
 
